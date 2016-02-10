@@ -1,8 +1,9 @@
+import java.util.Arrays;
+
 /**
  * Created by flo on 10.02.16.
  */
 public class TestData {
-
 
 
     final int[][] roomMatrix = {
@@ -14,16 +15,16 @@ public class TestData {
             {4, 4, 4, 4, 9, 9, 9, 10}
     };
 
-    final int n=-(roomMatrix.length*roomMatrix[0].length+1);//No Blocks!
+    final int n = Config.instance.n;
+    final int a = Config.instance.a;
 
-    // 0=Any number of Blocks , n=no blocks allowed in complete room(stronger than any)
     final int[][] blackCountMatrix = {
-            {0, 2, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 3, 0}
+            {a, 2, a, a, a, a, a, a},
+            {a, a, a, a, a, a, a, a},
+            {a, a, a, a, a, a, a, a},
+            {a, a, a, a, a, a, a, a},
+            {a, n, a, a, a, a, a, a},
+            {a, a, a, a, a, a, 3, a}
     };
 
     final int[][] blackMatrix = new int[blackCountMatrix.length][blackCountMatrix[0].length];
@@ -48,10 +49,14 @@ public class TestData {
         }
 
         countableRoomMatrix = new int[max + 1];
+        Arrays.parallelSetAll( countableRoomMatrix, v -> a );
 
-        for (int value : countableRoomMatrix) {
-            value = 0;
-
+        for (int row = 0; row < blackMatrix.length; row++) {
+            for (int cell = 0; cell < blackMatrix[0].length; cell++) {
+                if (blackCountMatrix[row][cell] != a) {
+                    countableRoomMatrix[roomMatrix[row][cell]] = (blackCountMatrix[row][cell]);
+                }
+            }
         }
 
     }

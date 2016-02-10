@@ -15,6 +15,8 @@ public class Application {
         final int[][] roomMatrix = testData.getRoomMatrix();
         final int[][] blackCountMatrix = testData.getBlackCountMatrix();
 
+        System.out.println(Arrays.toString(countableRoomMatrix));
+
         int[][] resultMatrix=solve(blackMatrix,countableRoomMatrix,blackCountMatrix,roomMatrix,0,0);
 
         for (int row = 0; row < blackMatrix.length; row++) {
@@ -81,7 +83,8 @@ public class Application {
 
         for (int row = 0; row < blackMatrix.length; row++) {
             for (int cell = 0; cell < blackMatrix[0].length; cell++) {
-                countableRoomMatrix[roomMatrix[row][cell]] += (blackMatrix[row][cell] - blackCountMatrix[row][cell]);
+                if(countableRoomMatrix[row]!=0)
+                    countableRoomMatrix[roomMatrix[row][cell]] -= (blackMatrix[row][cell]);
             }
         }
 
