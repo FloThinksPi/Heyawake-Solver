@@ -23,7 +23,7 @@ public class TestData {
             {a, a, a, a, a, a, a, a},
             {a, a, a, a, a, a, a, a},
             {a, a, a, a, a, a, a, a},
-            {a, n, a, a, a, a, a, a},
+            {a, a, a, a, a, a, a, a},
             {a, a, a, a, a, a, 3, a}
     };
 
