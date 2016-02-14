@@ -4,7 +4,7 @@
 public enum Config {
     instance;
 
-    final int n = (-Integer.MAX_VALUE) - 1; //RoomValue for No Blacks in Room
-    final int a = 0; //RoomValue for Any/NoData
+    final Integer a = -1; //RoomValue for Any
+    final Integer i = null; //Ignored
 
 }

@@ -1,10 +1,14 @@
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by flo on 10.02.16.
  */
 
 public class Application {
+
+    final static int a = Config.instance.a;
 
     public static void main(String args[]) {
 
@@ -13,54 +17,122 @@ public class Application {
         final int[][] blackMatrix = testData.getBlackMatrix();
         final int[][] roomInfoMatrix = testData.getRoomInfoMatrix();
         final int[][] roomMatrix = testData.getRoomMatrix();
-        final int[][] blackCountMatrix = testData.getBlackCountMatrix();
+
+        int[][][][] roomPossibilityMatrix = calculateAllPossibilitysForRooms(roomInfoMatrix);
 
     }
 
-    public static int[][][][] calculateAllPossibilitysForRoom(int[][] roomInfoMatrix){
+    //Calcs all possibillitys a rom can have(CalcValidRooms Wrapper) Result is a Multi Demensional Array.
+    //Result = [RoomIndex][SolutionIndex][Row][Cells] -> gives back all Possibiliitys a all rooms can have for themselves (without connection to other rooms, viewed as single hayawake)
+    //Sort of Divide and Conquer
+    public static int[][][][] calculateAllPossibilitysForRooms(int[][] roomInfoMatrix) {
 
         //[RoomNumber][Possibility][Width][Height]
-        int[][][][] roomPossibilityMatrix=new int[roomInfoMatrix.length][][][];
+        int[][][][] roomPossibilityMatrix = new int[roomInfoMatrix.length][][][];
+        List<int[][]> possibilitys = new LinkedList<>();
 
-        for(int roomIndex=0;roomIndex<roomInfoMatrix.length;roomIndex++){
+        for (int roomIndex = 0; roomIndex < roomInfoMatrix.length; roomIndex++) {
+
+            boolean exact;
+            int blackCount;
+
+            if (roomInfoMatrix[roomIndex][0] != a) {
+                exact = true;
+                blackCount = roomInfoMatrix[roomIndex][0];
+            } else {
+                exact = false;
+                blackCount = roomInfoMatrix[roomIndex][0] = (int) Math.ceil((roomInfoMatrix[roomIndex][1] * roomInfoMatrix[roomIndex][2]) / 2.0);
+            }
+
+            if (exact) {
+
+                possibilitys = calculateValidRooms(roomInfoMatrix, roomIndex, blackCount, 0, 0);
+
+//                for (int[][] ints : calculateValidRooms(roomInfoMatrix, roomIndex, blackCount, 0, 0)) {
+//                    System.out.println("New Solution for Room " + roomIndex);
+//                    for (int[] anInt : ints) {
+//                        System.out.println(Arrays.toString(anInt));
+//                    }
+//                }
+//                System.out.println("\n");
+
+            } else {
+
+                for (int i = 0; i <= blackCount; i++) {
+                    possibilitys.addAll(calculateValidRooms(roomInfoMatrix, roomIndex, i, 0, 0));
+                }
+
+            }
+
+            roomPossibilityMatrix[roomIndex] = new int[possibilitys.size()][][];
+
+            int count = 0;
+            for (int[][] possibility : possibilitys) {
+                roomPossibilityMatrix[roomIndex][count] = possibility;
+                count++;
+            }
+
+            possibilitys.clear();
 
         }
 
         return roomPossibilityMatrix;
     }
 
-    public static int[][] solve(int[][] blackMatrix, int[] countableRoomMatrix, int[][] blackCountMatrix, int[][] roomMatrix,int stepRow,int stepCell) {
+    //Calcs all Combinations a room can have given a fixed number of black fields it should have.
+    public static ArrayList<int[][]> calculateValidRooms(int[][] roomInfoMatrix, int roomIndex, int exactNumBlacks, int itterationRow, int itterationCell) {
 
-        int oldStepCell=stepCell;
-        int oldStepRow=stepRow;
+        ArrayList<int[][]> possibilityResults = new ArrayList<>();
+        int[][] tempRoom = new int[roomInfoMatrix[roomIndex][2]][roomInfoMatrix[roomIndex][1]];
+        int gesetzt = 0;
 
-        blackMatrix[stepRow][stepCell] = 1;
+        int startCell = itterationCell;
 
-        //Vorausschauend schritte machen
-        if (checkBlackNeighbours(blackMatrix, stepRow, stepCell) && checkBlackCountInRoom(blackMatrix, countableRoomMatrix, blackCountMatrix, roomMatrix,false)) {
+        if (exactNumBlacks == 0) {
+            possibilityResults.add(copyMatrix(tempRoom));
+        }
 
-            if(stepCell+2>=blackMatrix[0].length){
-                stepCell=(blackMatrix[0].length-1)-stepCell;
-                if(stepRow+1>=blackMatrix.length)stepRow=0;
-            }else{
-                stepCell+=2;
+        for (int row = itterationRow; row < roomInfoMatrix[roomIndex][2]; row++) {
+            for (int cell = startCell; cell < roomInfoMatrix[roomIndex][1]; cell++) {
+
+                if (checkBlackNeighbours(tempRoom, row, cell)) {
+                    tempRoom[row][cell] = 1;
+                    gesetzt++;
+                }
+                if (gesetzt == exactNumBlacks) {
+                    possibilityResults.add(copyMatrix(tempRoom));
+                    tempRoom[row][cell] = 0;
+                    gesetzt--;
+                }
             }
-
-            blackMatrix=solve(blackMatrix,countableRoomMatrix,blackCountMatrix,roomMatrix,stepRow,stepCell);
-
-        }else{
-            blackMatrix[stepRow][stepCell] = 0;
+            startCell = 0;
         }
 
-        if(checkBlackCountInRoom(blackMatrix, countableRoomMatrix, blackCountMatrix, roomMatrix,true)){
-            blackMatrix[oldStepRow][oldStepCell] = 0;
+        if (exactNumBlacks > 1) {
+            if (itterationCell + 1 < roomInfoMatrix[roomIndex][1]) {
+                possibilityResults.addAll(calculateValidRooms(roomInfoMatrix, roomIndex, exactNumBlacks, itterationRow, itterationCell + 1));
+            } else if (itterationRow + 1 < roomInfoMatrix[roomIndex][2]) {
+                possibilityResults.addAll(calculateValidRooms(roomInfoMatrix, roomIndex, exactNumBlacks, itterationRow + 1, 0));
+            }
         }
+
+        return possibilityResults;
+
+    }
+
+    public static int[][] solve(int[][] blackMatrix, int[] countableRoomMatrix, int[][] blackCountMatrix, int[][] roomMatrix, int stepRow, int stepCell) {
+
+
+        //TODO Try out all Permutations of Rooms
+
 
         return blackMatrix;
     }
 
-    //Low CPU Time
+    //Low CPU Time (9 Compares Worscase=Commen Use)
     public static boolean checkBlackNeighbours(int[][] blackMatrix, int row, int cell) {
+
+        if (blackMatrix[row][cell] == 1) return false;
 
         if (row != 0) {
             if (blackMatrix[row - 1][cell] == 1) return false;
@@ -74,47 +146,36 @@ public class Application {
             if (blackMatrix[row][cell - 1] == 1) return false;
         }
 
-        if (cell != blackMatrix.length - 1) {
+        if (cell != blackMatrix[0].length - 1) {
             if (blackMatrix[row][cell + 1] == 1) return false;
         }
 
         return true;
     }
 
-    //Middle CPU Time
-    //Keine Blacks in 0 Felder , Nicht zu viele Blacks -> Genau
-    public static boolean checkBlackCountInRoom(int[][] blackMatrix, int[] countableRoomMatrix, int[][] blackCountMatrix, int[][] roomMatrix,boolean exact) {
 
-        for (int row = 0; row < blackMatrix.length; row++) {
-            for (int cell = 0; cell < blackMatrix[0].length; cell++) {
-                if(countableRoomMatrix[row]!=0)
-                    countableRoomMatrix[roomMatrix[row][cell]] -= (blackMatrix[row][cell]);
-            }
-        }
-
-        System.out.println("CountableRoomMatrix: " + Arrays.toString(countableRoomMatrix));
-
-        for (int value : countableRoomMatrix) {
-            if(exact) {
-                if (value != 0) return false;
-            }else{
-                if (value > 0) return false;
-            }
-        }
-
-        return true;
-    }
-
-    //High CPU Time
+    //High CPU Time(Guessed)
     //Kann erst am ende bestimmt werden !
     public static boolean checkWhiteLines(int[][] blackMatrix, int[][] roomMatrix, int row, int cell) {
+        //TODO Write Check for Straight lines
         return false;
     }
 
-    //Verry High CPU Time
+    //Low CPU Time(Guessed)
     public static boolean checkWhiteReachable(int[][] blackMatrix, int row, int cell) {
+        //TODO Write Check for Connected Whites
         return false;
     }
 
+    public static int[][] copyMatrix(int[][] matrix) {
+        int[][] myInt = new int[matrix.length][];
+        for (int i = 0; i < matrix.length; i++) {
+            int[] aMatrix = matrix[i];
+            int aLength = aMatrix.length;
+            myInt[i] = new int[aLength];
+            System.arraycopy(aMatrix, 0, myInt[i], 0, aLength);
+        }
+        return myInt;
+    }
 
 }
