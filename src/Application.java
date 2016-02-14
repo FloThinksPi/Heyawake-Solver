@@ -11,18 +11,22 @@ public class Application {
         TestData testData = new TestData();
 
         final int[][] blackMatrix = testData.getBlackMatrix();
-        final int[] countableRoomMatrix = testData.getCountableRoomMatrix();
+        final int[][] roomInfoMatrix = testData.getRoomInfoMatrix();
         final int[][] roomMatrix = testData.getRoomMatrix();
         final int[][] blackCountMatrix = testData.getBlackCountMatrix();
 
-        System.out.println(Arrays.toString(countableRoomMatrix));
+    }
 
-        int[][] resultMatrix=solve(blackMatrix,countableRoomMatrix,blackCountMatrix,roomMatrix,0,0);
+    public static int[][][][] calculateAllPossibilitysForRoom(int[][] roomInfoMatrix){
 
-        for (int row = 0; row < blackMatrix.length; row++) {
-            System.out.println(Arrays.toString(resultMatrix[row]));
+        //[RoomNumber][Possibility][Width][Height]
+        int[][][][] roomPossibilityMatrix=new int[roomInfoMatrix.length][][][];
+
+        for(int roomIndex=0;roomIndex<roomInfoMatrix.length;roomIndex++){
+
         }
 
+        return roomPossibilityMatrix;
     }
 
     public static int[][] solve(int[][] blackMatrix, int[] countableRoomMatrix, int[][] blackCountMatrix, int[][] roomMatrix,int stepRow,int stepCell) {
@@ -102,6 +106,7 @@ public class Application {
     }
 
     //High CPU Time
+    //Kann erst am ende bestimmt werden !
     public static boolean checkWhiteLines(int[][] blackMatrix, int[][] roomMatrix, int row, int cell) {
         return false;
     }
