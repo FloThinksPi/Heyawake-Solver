@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,14 +19,29 @@ public class Application {
         final int[][] roomInfoMatrix = testData.getRoomInfoMatrix();
         final int[][] roomMatrix = testData.getRoomMatrix();
 
-        int[][][][] roomPossibilityMatrix = calculateAllPossibilitysForRooms(roomInfoMatrix);
+        int[][][][] roomPossibilityMatrix = calculateAllPossibilitysForRooms(roomInfoMatrix, roomMatrix);
+
+
+        int[][] resultMatrix = new int[blackMatrix.length][blackMatrix[0].length];
+
+        for (int row = 0; row < blackMatrix.length; row++) {
+            for (int cell = 0; cell < blackMatrix[0].length; cell++) {
+                resultMatrix[row][cell] = roomPossibilityMatrix[roomMatrix[row][cell]][0][row][cell];
+            }
+        }
+
+        System.out.println("\nFINAL Solution for Room ");
+        for (int[] ints : resultMatrix) {
+            System.out.println(Arrays.toString(ints));
+        }
+        System.out.println("\n");
 
     }
 
     //Calcs all possibillitys a rom can have(CalcValidRooms Wrapper) Result is a Multi Demensional Array.
     //Result = [RoomIndex][SolutionIndex][Row][Cells] -> gives back all Possibiliitys a all rooms can have for themselves (without connection to other rooms, viewed as single hayawake)
     //Sort of Divide and Conquer
-    public static int[][][][] calculateAllPossibilitysForRooms(int[][] roomInfoMatrix) {
+    public static int[][][][] calculateAllPossibilitysForRooms(int[][] roomInfoMatrix, int[][] roomMatrix) {
 
         //[RoomNumber][Possibility][Width][Height]
         int[][][][] roomPossibilityMatrix = new int[roomInfoMatrix.length][][][];
@@ -46,9 +62,9 @@ public class Application {
 
             if (exact) {
 
-                possibilitys = calculateValidRooms(roomInfoMatrix, roomIndex, blackCount, 0, 0);
+                possibilitys = calculateValidRooms(roomInfoMatrix, roomMatrix, roomIndex, blackCount, 0, 0);
 
-//                for (int[][] ints : calculateValidRooms(roomInfoMatrix, roomIndex, blackCount, 0, 0)) {
+//                for (int[][] ints : calculateValidRooms(roomInfoMatrix, roomMatrix, roomIndex, blackCount, 0, 0)) {
 //                    System.out.println("New Solution for Room " + roomIndex);
 //                    for (int[] anInt : ints) {
 //                        System.out.println(Arrays.toString(anInt));
@@ -59,7 +75,7 @@ public class Application {
             } else {
 
                 for (int i = 0; i <= blackCount; i++) {
-                    possibilitys.addAll(calculateValidRooms(roomInfoMatrix, roomIndex, i, 0, 0));
+                    possibilitys.addAll(calculateValidRooms(roomInfoMatrix, roomMatrix, roomIndex, i, 0, 0));
                 }
 
             }
@@ -80,7 +96,7 @@ public class Application {
     }
 
     //Calcs all Combinations a room can have given a fixed number of black fields it should have.
-    public static ArrayList<int[][]> calculateValidRooms(int[][] roomInfoMatrix, int roomIndex, int exactNumBlacks, int itterationRow, int itterationCell) {
+    public static ArrayList<int[][]> calculateValidRooms(int[][] roomInfoMatrix, int[][] roomMatrix, int roomIndex, int exactNumBlacks, int itterationRow, int itterationCell) {
 
         ArrayList<int[][]> possibilityResults = new ArrayList<>();
         int[][] tempRoom = new int[roomInfoMatrix[roomIndex][2]][roomInfoMatrix[roomIndex][1]];
@@ -89,7 +105,7 @@ public class Application {
         int startCell = itterationCell;
 
         if (exactNumBlacks == 0) {
-            possibilityResults.add(copyMatrix(tempRoom));
+            possibilityResults.add(copyMatrixToFullSize(tempRoom, roomMatrix, roomIndex));
         }
 
         for (int row = itterationRow; row < roomInfoMatrix[roomIndex][2]; row++) {
@@ -100,7 +116,7 @@ public class Application {
                     gesetzt++;
                 }
                 if (gesetzt == exactNumBlacks) {
-                    possibilityResults.add(copyMatrix(tempRoom));
+                    possibilityResults.add(copyMatrixToFullSize(tempRoom, roomMatrix, roomIndex));
                     tempRoom[row][cell] = 0;
                     gesetzt--;
                 }
@@ -110,14 +126,15 @@ public class Application {
 
         if (exactNumBlacks > 1) {
             if (itterationCell + 1 < roomInfoMatrix[roomIndex][1]) {
-                possibilityResults.addAll(calculateValidRooms(roomInfoMatrix, roomIndex, exactNumBlacks, itterationRow, itterationCell + 1));
+                possibilityResults.addAll(calculateValidRooms(roomInfoMatrix, roomMatrix, roomIndex, exactNumBlacks, itterationRow, itterationCell + 1));
             } else if (itterationRow + 1 < roomInfoMatrix[roomIndex][2]) {
-                possibilityResults.addAll(calculateValidRooms(roomInfoMatrix, roomIndex, exactNumBlacks, itterationRow + 1, 0));
+                possibilityResults.addAll(calculateValidRooms(roomInfoMatrix, roomMatrix, roomIndex, exactNumBlacks, itterationRow + 1, 0));
             }
         }
 
-        return possibilityResults;
+        //TODO Erweitere Rooms auf volle Rätsel größe
 
+        return possibilityResults;
     }
 
     public static int[][] solve(int[][] blackMatrix, int[] countableRoomMatrix, int[][] blackCountMatrix, int[][] roomMatrix, int stepRow, int stepCell) {
@@ -167,15 +184,26 @@ public class Application {
         return false;
     }
 
-    public static int[][] copyMatrix(int[][] matrix) {
-        int[][] myInt = new int[matrix.length][];
-        for (int i = 0; i < matrix.length; i++) {
-            int[] aMatrix = matrix[i];
-            int aLength = aMatrix.length;
-            myInt[i] = new int[aLength];
-            System.arraycopy(aMatrix, 0, myInt[i], 0, aLength);
+    //Copys Array and inserts it in the right place in a Full sized(sized like complete heyawake) array.
+    public static int[][] copyMatrixToFullSize(int[][] aRoom, int[][] roomMatrix, int roomIndex) {
+
+        int[][] newMatrix = new int[roomMatrix.length][roomMatrix[0].length];
+
+        int startRow = -1;
+        int startCell = -1;
+        for (int row = 0; row < newMatrix.length; row++) {
+            for (int cell = 0; cell < newMatrix[0].length; cell++) {
+                if (roomMatrix[row][cell] == roomIndex) {
+                    if (startRow == -1) {
+                        startRow = row;
+                        startCell = cell;
+                    }
+                    if (startRow != -1) newMatrix[row][cell] = aRoom[row - startRow][cell - startCell];
+                }
+            }
         }
-        return myInt;
+
+        return newMatrix;
     }
 
 }
