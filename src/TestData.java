@@ -15,7 +15,7 @@ public class TestData {
     final Integer[][] blackCountMatrix = Config.instance.activeBlackCountMatrix;
 
     //Reduced Information gathered out of the roomMatrix and blackCountMatrix(roomMatrix and blackCountMatrix are there for better visualisation)
-    //[RoomNumber][0->2] 0=NumBlacks 1=Width 2=Height
+    //[RoomNumber][0->2] 0=NumBlacks 1=Width 2=Height 3=row start 4=cell start (start = left top corner of room)
     final int[][] roomInfoMatrix;
 
     final int[][] blackMatrix = new int[blackCountMatrix.length][blackCountMatrix[0].length];
@@ -39,7 +39,7 @@ public class TestData {
         roomCount++;
 
         //Create List with room Informations int[RoomNumber][0->2] 0=NumBlacks 1=Width 2=Height
-        roomInfoMatrix = new int[roomCount][3];
+        roomInfoMatrix = new int[roomCount][5];
 
         //Save With and Height of every Room [roomNumber][0-1] 0=count 1=locked
         int[][] roomWidth = new int[roomCount][2];
@@ -47,10 +47,14 @@ public class TestData {
 
         int prevCell = -1;
         int[] prevRow = new int[blackMatrix[0].length];
-        Arrays.setAll(prevRow, v -> -1);
+        Arrays.parallelSetAll(prevRow, v -> -1);
 
         for (int row = 0; row < blackMatrix.length; row++) {
             for (int cell = 0; cell < blackMatrix[0].length; cell++) {
+                if(roomWidth[roomMatrix[row][cell]][0]==0){
+                    roomInfoMatrix[roomMatrix[row][cell]][3]=row;
+                    roomInfoMatrix[roomMatrix[row][cell]][4]=cell;
+                }
                 //Width
                 if (prevCell != roomMatrix[row][cell] && prevCell != -1) {
                     roomWidth[prevCell][1] = 1;
@@ -91,7 +95,7 @@ public class TestData {
             }
         }
 
-//        System.out.println(Arrays.deepToString(roomInfoMatrix));
+        System.out.println(Arrays.deepToString(roomInfoMatrix));
 
     }
 
