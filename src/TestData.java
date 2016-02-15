@@ -7,27 +7,12 @@ public class TestData {
 
     // i=ignored a=any
     final int a = Config.instance.a;
-    final Integer i = Config.instance.i;
 
     //Matrix which gives information about Rooms and Room boundrys
-    final int[][] roomMatrix = {
-            {0, 0, 1, 1, 1, 1, 1, 1},
-            {0, 0, 1, 1, 1, 1, 1, 1},
-            {2, 2, 2, 5, 6, 7, 7, 7},
-            {3, 3, 3, 5, 8, 8, 8, 8},
-            {3, 3, 3, 5, 9, 9, 9, 10},
-            {4, 4, 4, 4, 9, 9, 9, 10}
-    };
+    final int[][] roomMatrix = Config.instance.activeRoomMatrix;
 
     //Matrix which gives information about number of blacks in Rooms
-    final Integer[][] blackCountMatrix = {
-            {i, 2, i, i, i, i, i, a},
-            {i, i, i, i, i, i, i, i},
-            {i, i, a, a, a, i, i, a},
-            {i, i, a, i, i, i, i, a},
-            {i, i, i, i, i, i, i, a},
-            {i, i, i, a, i, i, 3, i}
-    };
+    final Integer[][] blackCountMatrix = Config.instance.activeBlackCountMatrix;
 
     //Reduced Information gathered out of the roomMatrix and blackCountMatrix(roomMatrix and blackCountMatrix are there for better visualisation)
     //[RoomNumber][0->2] 0=NumBlacks 1=Width 2=Height
@@ -106,7 +91,7 @@ public class TestData {
             }
         }
 
-        System.out.println(Arrays.deepToString(roomInfoMatrix));
+//        System.out.println(Arrays.deepToString(roomInfoMatrix));
 
     }
 

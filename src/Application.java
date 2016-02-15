@@ -1,4 +1,8 @@
+import java.time.Duration;
+import java.time.Instant;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by flo on 10.02.16.
@@ -10,9 +14,10 @@ public class Application {
 
     public static void main(String args[]) {
 
+        long startTime = System.nanoTime();
+
         TestData testData = new TestData();
 
-        final int[][] blackMatrix = testData.getBlackMatrix();
         final int[][] roomInfoMatrix = testData.getRoomInfoMatrix();
         final int[][] roomMatrix = testData.getRoomMatrix();
 
@@ -23,15 +28,18 @@ public class Application {
         int[][] resultMatrix = new int[roomMatrix.length][roomMatrix[0].length];
         resultMatrix = findResult(roomPossibilityMatrix, roomMatrix, resultMatrix, 0);
 
+        long stopTime = System.nanoTime();
+
         if (resultMatrix != null) {
-            System.out.println("\nFINAL Solution for Room ");
+            System.out.println("\n Solution found in "+(stopTime-startTime)/ 1000000000.0+" Seconds");
             for (int[] ints : resultMatrix) {
                 System.out.println(Arrays.toString(ints));
             }
             System.out.println("\n");
         } else {
-            System.out.println("Keine Lösung gefunden!");
+            System.out.println("No Solution found! in"+(stopTime-startTime)/ 1000000000.0+" Seconds");
         }
+
 
 
     }
@@ -199,7 +207,7 @@ public class Application {
                 if (checkNeigbours == false) continue;
 
                 //Todo reihenfolger
-                if (checkWhiteLines(tempResultMatrix, roomMatrix) && checkNeigbours && checkWhiteReachable(tempResultMatrix, 0, 0)) {
+                if (checkNeigbours && checkWhiteLines(tempResultMatrix, roomMatrix) && checkWhiteReachable(tempResultMatrix, 0, 0)) {
                     return tempResultMatrix;
                 } else {
                     checkWhiteReachable = false;
@@ -213,8 +221,6 @@ public class Application {
 
     }
 
-    //High CPU Time(Guessed)
-    //Kann erst am ende bestimmt werden !
     public static boolean checkWhiteLines(int[][] sourceMatrix, int[][] roomMatrix) {
 
         boolean isOK = true;
@@ -242,6 +248,7 @@ public class Application {
             }
         }
 
+        //Todo pack vertical loop in Horizontal loop
         //Vertical Check
         for (int cell = 0; cell < sourceMatrix[0].length; cell++) {
             counter = 0;
