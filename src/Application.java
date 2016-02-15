@@ -177,24 +177,25 @@ public class Application {
                 }
             }
 
-            for (int row = 0; row < roomMatrix.length; row++) {
-                for (int cell = 0; cell < roomMatrix[0].length; cell++) {
-
-                    if (tempResultMatrix[row][cell]==1&&!checkBlackNeighbours(tempResultMatrix, row, cell,false)){
-                        checkNeigbours=false;
-                        break;
-                    }
-
-                }
-                if(checkNeigbours==false)break;
-            }
-            if(checkNeigbours==false)continue;
 
             if (startRoomIndex != roomPossibilityMatrix.length - 1) {
                 tempResultMatrix = findResult(roomPossibilityMatrix, copyMatrix(roomMatrix), tempResultMatrix, startRoomIndex + 1);
                 if (tempResultMatrix != null) return tempResultMatrix;
                 else tempResultMatrix = resultMatrix;
             } else {
+
+                for (int row = 0; row < roomMatrix.length; row++) {
+                    for (int cell = 0; cell < roomMatrix[0].length; cell++) {
+
+                        if (tempResultMatrix[row][cell]==1&&!checkBlackNeighbours(tempResultMatrix, row, cell,false)){
+                            checkNeigbours=false;
+                            break;
+                        }
+
+                    }
+                    if(checkNeigbours==false)break;
+                }
+                if(checkNeigbours==false)continue;
 
                 if (checkNeigbours&&checkWhiteReachable(tempResultMatrix, 0, 0)) {
                     return tempResultMatrix;
