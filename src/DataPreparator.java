@@ -1,12 +1,9 @@
 import java.util.Arrays;
 
-/**
- * Created by flo on 10.02.16.
- */
-public class TestData {
+public class DataPreparator {
 
     // i=ignored a=any
-    final int a = Config.instance.a;
+    final int a = Config.instance.i;// Ignored/any
 
     //Matrix which gives information about Rooms and Room boundrys
     final int[][] roomMatrix = Config.instance.activeRoomMatrix;
@@ -20,7 +17,7 @@ public class TestData {
 
     final int[][] blackMatrix = new int[blackCountMatrix.length][blackCountMatrix[0].length];
 
-    public TestData() {
+    public DataPreparator() {
 
         //Initialize Black Matrix(all white)
         for (int row = 0; row < blackMatrix.length; row++) {
@@ -78,16 +75,16 @@ public class TestData {
         for (int room = 0; room < roomCount; room++) {
             roomInfoMatrix[room][1] = roomWidth[room][0];
             roomInfoMatrix[room][2] = (roomHeight[room][0] / roomWidth[room][0]);
+            roomInfoMatrix[room][0]= -1; //Prepareation for next loop
         }
+
 
         //Calculate max Blacks in room based on blackCountMatrix
         for (int row = 0; row < blackMatrix.length; row++) {
             for (int cell = 0; cell < blackMatrix[0].length; cell++) {
                 if (blackCountMatrix[row][cell] != null) {
 
-                    if (blackCountMatrix[row][cell] == a) {
-                        roomInfoMatrix[roomMatrix[row][cell]][0] = a;
-                    } else {
+                    if (blackCountMatrix[row][cell] != a) {
                         roomInfoMatrix[roomMatrix[row][cell]][0] = (blackCountMatrix[row][cell]);
                     }
 
@@ -95,16 +92,12 @@ public class TestData {
             }
         }
 
-        System.out.println(Arrays.deepToString(roomInfoMatrix));
+        //System.out.println(Arrays.deepToString(roomInfoMatrix));
 
     }
 
     public int[][] getRoomMatrix() {
         return roomMatrix;
-    }
-
-    public int[][] getBlackMatrix() {
-        return blackMatrix;
     }
 
     public int[][] getRoomInfoMatrix() {

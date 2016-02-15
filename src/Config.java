@@ -1,11 +1,8 @@
-/**
- * Created by flo on 10.02.16.
- */
+
 public enum Config {
     instance;
 
-    final Integer a = -1; //RoomValue for Any
-    final Integer i = null; //Ignored
+    final Integer i = -1; //Ignored
 
     //http://www.janko.at/Raetsel/Heyawake/331.a.htm
     final int[][] R_331 = {
@@ -17,36 +14,54 @@ public enum Config {
             {4, 4, 4, 4, 9, 9, 9, 10}
     };
     final Integer[][] B_331 = {
-            {i, 2, i, i, i, i, i, a},
+            {i, 2, i, i, i, i, i, i},
             {i, i, i, i, i, i, i, i},
-            {i, i, a, a, a, i, i, a},
-            {i, i, a, i, i, i, i, a},
-            {i, i, i, i, i, i, i, a},
-            {i, i, i, a, i, i, 3, i}
+            {i, i, i, i, i, i, i, i},
+            {i, i, i, i, i, i, i, i},
+            {i, i, i, i, i, i, i, i},
+            {i, i, i, i, i, i, 3, i}
     };
 
     //Todo Add more Tests
     //http://www.janko.at/Raetsel/Heyawake/459.a.htm
     final int[][] R_459 = {
-            {0, 0, 1, 1, 1, 1, 1, 1},
-            {0, 0, 1, 1, 1, 1, 1, 1},
-            {2, 2, 2, 5, 6, 7, 7, 7},
-            {3, 3, 3, 5, 8, 8, 8, 8},
-            {3, 3, 3, 5, 9, 9, 9, 10},
-            {4, 4, 4, 4, 9, 9, 9, 10}
+            {0, 0, 8, 8, 8, 13, 13, 13, 19, 19, 19, 24, 24, 24, 27, 27, 27, 27, 27, 34, 34, 34, 34, 34},
+            {0, 0, 8, 8, 8, 13, 13, 13, 19, 19, 19, 24, 24, 24, 28, 28, 29, 29, 29, 35, 35, 35, 42, 42},
+            {2, 2, 2, 10, 10, 14, 14, 14, 19, 19, 19, 24, 24, 24, 28, 28, 29, 29, 29, 35, 35, 35, 42, 42},
+            {3, 3, 3, 10, 10, 14, 14, 14, 20, 20, 20, 25, 25, 25, 28, 28, 29, 29, 29, 35, 35, 35, 42, 42},
+            {3, 3, 3, 10, 10, 15, 15, 15, 20, 20, 20, 25, 25, 25, 28, 28, 30, 30, 30, 36, 36, 36, 43, 43},
+            {3, 3, 3, 10, 10, 15, 15, 15, 20, 20, 20, 25, 25, 25, 28, 28, 30, 30, 30, 36, 36, 36, 43, 43},
+            {4, 4, 4, 11, 11, 11, 17, 17, 17, 17, 21, 21, 21, 26, 26, 26, 30, 30, 30, 36, 36, 36, 43, 43},
+            {5, 5, 9, 11, 11, 11, 17, 17, 17, 17, 21, 21, 21, 26, 26, 26, 30, 30, 30, 36, 36, 36, 43, 43},
+            {5, 5, 9, 11, 11, 11, 17, 17, 17, 17, 22, 22, 22, 26, 26, 26, 31, 33, 33, 36, 36, 36, 1, 1},
+            {6, 6, 6, 6, 6, 16, 16, 16, 16, 16, 23, 23, 23, 26, 26, 26, 31, 33, 33, 37, 37, 39, 1, 1},
+            {6, 6, 6, 6, 6, 16, 16, 16, 16, 16, 23, 23, 23, 26, 26, 26, 31, 33, 33, 37, 37, 40, 1, 1},
+            {7, 7, 7, 7, 12, 12, 12, 18, 18, 18, 23, 23, 23, 26, 26, 26, 32, 32, 32, 37, 37, 41, 41, 41},
+            {7, 7, 7, 7, 12, 12, 12, 18, 18, 18, 23, 23, 23, 26, 26, 26, 32, 32, 32, 38, 38, 41, 41, 41},
+            {7, 7, 7, 7, 12, 12, 12, 18, 18, 18, 23, 23, 23, 26, 26, 26, 32, 32, 32, 38, 38, 41, 41, 41}
     };
     final Integer[][] B_459 = {
-            {i, 2, i, i, i, i, i, a},
-            {i, i, i, i, i, i, i, i},
-            {i, i, a, a, a, i, i, a},
-            {i, i, a, i, i, i, i, a},
-            {i, i, i, i, i, i, i, a},
-            {i, i, i, a, i, i, 3, i}
+            {2, i, 2, i, i, 2, i, i, i, i, i, 3, i, i, i, i, i, i, i, 3, i, i, i, i},
+            {i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, 4, i, i, 3, i, i, 2, i},
+            {1, i, i, 3, i, 2, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i},
+            {i, i, i, i, i, i, i, i, i, i, i, 4, i, i, i, i, i, i, i, i, i, i, i, i},
+            {i, i, i, i, i, 2, i, i, i, i, i, i, i, i, i, i, 4, i, i, 4, i, i, 3, i},
+            {i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i},
+            {2, i, i, 4, i, i, 4, i, i, i, 2, i, i, 5, i, i, i, i, i, i, i, i, i, i},
+            {i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i},
+            {i, i, i, i, i, i, i, i, i, i, 1, i, i, i, i, i, 2, 2, i, i, i, i, 2, i},
+            {4, i, i, i, i, 2, i, i, i, i, 5, i, i, i, i, i, i, i, i, i, i, 1, i, i},
+            {i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i},
+            {4, i, i, i, 3, i, i, 3, i, i, i, i, i, i, i, i, 2, i, i, i, i, 2, i, i},
+            {i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i},
+            {i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i}
     };
+
+    //http://www.janko.at/Raetsel/Heyawake/350.a.htm
 
 
     //Define RoomMatrix and BlackCountMatrix for calculation Here!
-    final Integer[][] activeBlackCountMatrix=B_331;
-    final int[][] activeRoomMatrix=R_331;
+    final Integer[][] activeBlackCountMatrix = B_331;
+    final int[][] activeRoomMatrix = R_331;
 
 }
