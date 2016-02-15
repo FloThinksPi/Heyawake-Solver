@@ -109,7 +109,7 @@ public class Application {
         for (int row = itterationRow; row < roomInfoMatrix[roomIndex][2]; row++) {
             for (int cell = startCell; cell < roomInfoMatrix[roomIndex][1]; cell++) {
 
-                if (checkBlackNeighbours(tempRoom, row, cell,true)) {
+                if (checkBlackNeighbours(tempRoom, row, cell, true)) {
                     tempRoom[row][cell] = 1;
                     gesetzt++;
                 }
@@ -134,9 +134,9 @@ public class Application {
     }
 
     //Low CPU Time (9 Compares Worscase=Commen Use)
-    public static boolean checkBlackNeighbours(int[][] blackMatrix, int row, int cell,boolean includeOwnField) {
+    public static boolean checkBlackNeighbours(int[][] blackMatrix, int row, int cell, boolean includeOwnField) {
 
-        if (includeOwnField&&blackMatrix[row][cell] == 1) return false;
+        if (includeOwnField && blackMatrix[row][cell] == 1) return false;
 
         if (row != 0) {
             if (blackMatrix[row - 1][cell] == 1) return false;
@@ -157,11 +157,11 @@ public class Application {
         return true;
     }
 
-    public static int[][] findResult(int[][][][] roomPossibilityMatrix, int[][] roomMatrix, int[][] resultMatrix, int startRoomIndex)  {
+    public static int[][] findResult(int[][][][] roomPossibilityMatrix, int[][] roomMatrix, int[][] resultMatrix, int startRoomIndex) {
 
         int[][] tempResultMatrix = resultMatrix;
-        boolean checkNeigbours=true;
-        boolean checkWhiteReachable=true;
+        boolean checkNeigbours = true;
+        boolean checkWhiteReachable = true;
 
         for (int possibility = 0; possibility < roomPossibilityMatrix[startRoomIndex].length; possibility++) {
 //            System.out.println("Room: "+startRoomIndex+" Possibillity: "+possibility);
@@ -173,7 +173,8 @@ public class Application {
             //Todo start with OFFSET (Width and Height) -> Better Performance
             for (int row = 0; row < roomMatrix.length; row++) {
                 for (int cell = 0; cell < roomMatrix[0].length; cell++) {
-                    if(roomMatrix[row][cell]==startRoomIndex)tempResultMatrix[row][cell] = roomPossibilityMatrix[startRoomIndex][possibility][row][cell];
+                    if (roomMatrix[row][cell] == startRoomIndex)
+                        tempResultMatrix[row][cell] = roomPossibilityMatrix[startRoomIndex][possibility][row][cell];
                 }
             }
 
@@ -187,20 +188,21 @@ public class Application {
                 for (int row = 0; row < roomMatrix.length; row++) {
                     for (int cell = 0; cell < roomMatrix[0].length; cell++) {
 
-                        if (tempResultMatrix[row][cell]==1&&!checkBlackNeighbours(tempResultMatrix, row, cell,false)){
-                            checkNeigbours=false;
+                        if (tempResultMatrix[row][cell] == 1 && !checkBlackNeighbours(tempResultMatrix, row, cell, false)) {
+                            checkNeigbours = false;
                             break;
                         }
 
                     }
-                    if(checkNeigbours==false)break;
+                    if (checkNeigbours == false) break;
                 }
-                if(checkNeigbours==false)continue;
+                if (checkNeigbours == false) continue;
 
-                if (checkNeigbours&&checkWhiteReachable(tempResultMatrix, 0, 0)) {
+                //Todo reihenfolger
+                if (checkWhiteLines(tempResultMatrix, roomMatrix) && checkNeigbours && checkWhiteReachable(tempResultMatrix, 0, 0)) {
                     return tempResultMatrix;
                 } else {
-                    checkWhiteReachable=false;
+                    checkWhiteReachable = false;
                 }
 
             }
@@ -213,15 +215,62 @@ public class Application {
 
     //High CPU Time(Guessed)
     //Kann erst am ende bestimmt werden !
-    public static boolean checkWhiteLines(int[][] blackMatrix, int[][] roomMatrix, int row, int cell) {
-        //TODO Write Check for Straight lines
-        return false;
+    public static boolean checkWhiteLines(int[][] sourceMatrix, int[][] roomMatrix) {
+
+        boolean isOK = true;
+        int counter;
+        int lastRoom;
+
+        //Horizopntal Check
+        for (int row = 0; row < sourceMatrix.length; row++) {
+            counter = 0;
+            lastRoom = -1;
+            for (int cell = 0; cell < sourceMatrix[0].length; cell++) {
+
+                if (lastRoom != roomMatrix[row][cell]) {
+                    counter++;
+                    lastRoom = roomMatrix[row][cell];
+                }
+
+                if (sourceMatrix[row][cell] == 1) {
+                    counter = 0;
+                    lastRoom = -1;
+                }
+
+                if (counter >= 3) return false;
+
+            }
+        }
+
+        //Vertical Check
+        for (int cell = 0; cell < sourceMatrix[0].length; cell++) {
+            counter = 0;
+            lastRoom = -1;
+            for (int row = 0; row < sourceMatrix.length; row++) {
+
+                if (lastRoom != roomMatrix[row][cell]) {
+                    counter++;
+                    lastRoom = roomMatrix[row][cell];
+                }
+
+                if (sourceMatrix[row][cell] == 1) {
+                    counter = 0;
+                    lastRoom = -1;
+                }
+
+                if (counter >= 3) return false;
+
+            }
+        }
+
+
+        return true;
     }
 
 
     public static boolean checkWhiteReachable(int[][] blackMatrix, int startRow, int startCell) {
 
-        int[][] trackedMatrix = checkWhiteReachableRecursive(blackMatrix, 0, 0);
+        int[][] trackedMatrix = checkWhiteReachableRecursive(blackMatrix, 0, 0,true);
 
 //        System.out.println("\nWhite Pathfinding Matrix");
         for (int[] ints : trackedMatrix) {
@@ -236,38 +285,62 @@ public class Application {
     }
 
     //Low CPU Time(Guessed)
-    public static int[][] checkWhiteReachableRecursive(int[][] sourceMatrix, int startRow, int startCell) {
+    public static int[][] checkWhiteReachableRecursive(int[][] sourceMatrix, int startRow, int startCell,boolean first) {
         //TODO Write Check for Connected Whites
 
         int[][] blackMatrix = copyMatrix(sourceMatrix);
 
-        for (int row = 0; row < blackMatrix.length; row++) {
-            for (int cell = 0; cell < blackMatrix[0].length; cell++) {
-                if (blackMatrix[row][cell] == 0) {
-                    blackMatrix[row][cell] = 2;
 
-                    if (row != 0) {
-                        if (blackMatrix[row - 1][cell] == 0)
-                            blackMatrix = checkWhiteReachableRecursive(blackMatrix, (row - 1), cell);
-                    }
+//        System.out.println("\nWhite Connected Checker Step");
+//        for (int[] ints : blackMatrix) {
+//            System.out.println(Arrays.toString(ints));
+//        }
+//        System.out.println("\n");
+//
+//        try {
+//            Thread.sleep(2000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
 
-                    if (row != blackMatrix.length - 1) {
-                        if (blackMatrix[row + 1][cell] == 0)
-                            blackMatrix = checkWhiteReachableRecursive(blackMatrix, (row + 1), cell);
-                    }
-
-                    if (cell != 0) {
-                        if (blackMatrix[row][cell - 1] == 0)
-                            blackMatrix = checkWhiteReachableRecursive(blackMatrix, row, (cell - 1));
-                    }
-
-                    if (cell != blackMatrix[0].length - 1) {
-                        if (blackMatrix[row][cell + 1] == 0)
-                            blackMatrix = checkWhiteReachableRecursive(blackMatrix, row, (cell + 1));
+        if(first) {
+            for (int row = startRow; row < blackMatrix.length; row++) {
+                for (int cell = startCell; cell < blackMatrix[0].length; cell++) {
+                    if (blackMatrix[row][cell] == 0) {
+                        startCell = cell;
+                        startRow = row;
+                        first=false;
+                        break;
                     }
                 }
+                if(!first)break;
             }
         }
+
+        if (blackMatrix[startRow][startCell] == 0) {
+            blackMatrix[startRow][startCell] = 2;
+
+            if (startRow != 0) {
+                if (blackMatrix[startRow - 1][startCell] == 0)
+                    blackMatrix = checkWhiteReachableRecursive(blackMatrix, (startRow - 1), startCell,false);
+            }
+
+            if (startRow != blackMatrix.length - 1) {
+                if (blackMatrix[startRow + 1][startCell] == 0)
+                    blackMatrix = checkWhiteReachableRecursive(blackMatrix, (startRow + 1), startCell,false);
+            }
+
+            if (startCell != 0) {
+                if (blackMatrix[startRow][startCell - 1] == 0)
+                    blackMatrix = checkWhiteReachableRecursive(blackMatrix, startRow, (startCell - 1),false);
+            }
+
+            if (startCell != blackMatrix[0].length - 1) {
+                if (blackMatrix[startRow][startCell + 1] == 0)
+                    blackMatrix = checkWhiteReachableRecursive(blackMatrix, startRow, (startCell + 1),false);
+            }
+        }
+
 
         return blackMatrix;
     }
