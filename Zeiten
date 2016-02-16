@@ -6,36 +6,19 @@
 [0, 0, 0, 0, 1, 0, 1, 0]
 [0, 1, 0, 0, 0, 1, 0, 0]
 
-
-CheckWhiteLines Otimized
-
-Solution found in 25.959471526 Seconds
-[1, 0, 0, 0, 0, 0, 0, 0]
-[0, 1, 0, 0, 1, 0, 1, 0]
-[0, 0, 0, 1, 0, 1, 0, 1]
-[1, 0, 1, 0, 0, 0, 0, 0]
-[0, 0, 0, 0, 1, 0, 1, 0]
-[0, 1, 0, 0, 0, 1, 0, 0]
-
- Solution found in 4.331372592 Seconds
-[1, 0, 0, 0, 0, 0, 0, 0]
-[0, 1, 0, 0, 1, 0, 1, 0]
-[0, 0, 0, 1, 0, 1, 0, 1]
-[1, 0, 1, 0, 0, 0, 0, 0]
-[0, 0, 0, 0, 1, 0, 1, 0]
-[0, 1, 0, 0, 0, 1, 0, 0]
+        ||
+        ||
+        \/
 
 Preparing Heyawake Data.
 Prepared Heyawake Data in 0.04666445 Seconds
 
- Calculating Solution Now
+Calculating Solution Now
 
- Solution found in 1.782639484 Seconds
+Solution found in 1.782639484 Seconds
 [1, 0, 0, 0, 0, 0, 0, 0]
 [0, 1, 0, 0, 1, 0, 1, 0]
 [0, 0, 0, 1, 0, 1, 0, 1]
 [1, 0, 1, 0, 0, 0, 0, 0]
 [0, 0, 0, 0, 1, 0, 1, 0]
 [0, 1, 0, 0, 0, 1, 0, 0]
-
-anderes rätsel > 4h

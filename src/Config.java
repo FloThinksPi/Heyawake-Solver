@@ -4,6 +4,7 @@ public enum Config {
 
     final Integer i = -1; //Ignored
 
+    //Schwierigkeit 2
     //http://www.janko.at/Raetsel/Heyawake/331.a.htm
     final int[][] R_331 = {
             {0, 0, 1, 1, 1, 1, 1, 1},
@@ -22,7 +23,35 @@ public enum Config {
             {i, i, i, i, i, i, 3, i}
     };
 
-    //Todo Add more Tests
+    //http://www.janko.at/Raetsel/Heyawake/060.a.htm
+    final int[][] R_060 = {
+            {9, 9, 9, 10, 10, 11, 11, 12, 12, 12, 13, 13, 13, 13, 14, 14, 15, 16},
+            {9, 9, 9, 10, 10, 11, 11, 12, 12, 12, 13, 13, 13, 13, 14, 14, 15, 16},
+            {17, 17, 17, 10, 10, 11, 11, 12, 12, 12, 18, 18, 18, 18, 19, 19, 15, 16},
+            {17, 17, 17, 10, 10, 11, 11, 20, 21, 21, 18, 18, 18, 18, 19, 19, 22, 16},
+            {17, 17, 17, 23, 23, 23, 23, 23, 23, 23, 23, 24, 24, 25, 19, 19, 22, 16},
+            {26, 26, 27, 27, 27, 28, 28, 29, 29, 30, 30, 30, 30, 25, 19, 19, 22, 16},
+            {26, 26, 27, 27, 27, 28, 28, 29, 29, 31, 31, 31, 31, 31, 31, 31, 22, 16},
+            {32, 32, 32, 32, 33, 33, 33, 33, 34, 34, 1, 1, 2, 2, 2, 3, 22, 16},
+            {4, 4, 4, 4, 33, 33, 33, 33, 34, 34, 1, 1, 2, 2, 2, 5, 5, 6},
+            {4, 4, 4, 4, 7, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 5, 5, 0}
+    };
+    final Integer[][] B_060 = {
+            {1, i, i, 3, i, 2, i, 2, i, i, 3, i, i, i, 1, i, 0, 3},
+            {i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i},
+            {4, i, i, i, i, i, i, i, i, i, 3, i, i, i, 3, i, i, i},
+            {i, i, i, i, i, i, i, i, 1, i, i, i, i, i, i, i, 1, i},
+            {i, i, i, 1, i, i, i, i, i, i, i, 1, i, 1, i, i, i, i},
+            {1, i, 3, i, i, 2, i, 1, i, i, i, i, i, i, i, i, i, i},
+            {i, i, i, i, i, i, i, i, i, 3, i, i, i, i, i, i, i, i},
+            {i, i, i, i, 0, i, i, i, i, i, 1, i, 3, i, i, i, i, i},
+            {3, i, i, i, i, i, i, i, i, i, i, i, i, i, i, 2, i, i},
+            {i, i, i, i, i, i, 1, i, i, i, i, i, i, i, i, i, i, i}
+    };
+
+
+    //Schwierigkeit 5 -> Groß
+    // Da NP-Complete , -> In 4H nicht fertig.
     //http://www.janko.at/Raetsel/Heyawake/459.a.htm
     final int[][] R_459 = {
             {0, 0, 8, 8, 8, 13, 13, 13, 19, 19, 19, 24, 24, 24, 27, 27, 27, 27, 27, 34, 34, 34, 34, 34},
@@ -61,7 +90,7 @@ public enum Config {
 
 
     //Define RoomMatrix and BlackCountMatrix for calculation Here!
-    final Integer[][] activeBlackCountMatrix = B_331;
-    final int[][] activeRoomMatrix = R_331;
+    final Integer[][] activeBlackCountMatrix = B_060;
+    final int[][] activeRoomMatrix = R_060;
 
 }
