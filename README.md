@@ -1,7 +1,13 @@
 Heyawake Solver in Java
 ============
 
-...
+This solver solves heyawake puzzles, read more about heyawake here: https://en.wikipedia.org/wiki/Heyawake
+You can play some games here: http://www.janko.at/Raetsel/Heyawake/
+
+The puzzle to solve has to be hardcoded in `config.java`
+- The first matrix describes the rooms of the puzzle trough numbering them.
+- The second matrix describes what values are at wich position in the puzzle.
+- Lastly change the variables `activeBlackCountMatrix` and `activeRoomMatrix` to the puzzle which you want to solve.
 
 BSD 2-Clause License
 ============
