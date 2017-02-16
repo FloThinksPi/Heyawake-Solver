@@ -2,6 +2,7 @@ Heyawake Solver in Java
 ============
 
 This solver solves heyawake puzzles, read more about heyawake here: https://en.wikipedia.org/wiki/Heyawake
+
 You can play some games here: http://www.janko.at/Raetsel/Heyawake/
 
 The puzzle to solve has to be hardcoded in `config.java`
