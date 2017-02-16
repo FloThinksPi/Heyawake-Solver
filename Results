@@ -1,0 +1,35 @@
+//Schwierigkeit 2
+//http://www.janko.at/Raetsel/Heyawake/331.a.htm
+final int[][] R_331 = {
+        {0, 0, 1, 1, 1, 1, 1, 1},
+        {0, 0, 1, 1, 1, 1, 1, 1},
+        {2, 2, 2, 5, 6, 7, 7, 7},
+        {3, 3, 3, 5, 8, 8, 8, 8},
+        {3, 3, 3, 5, 9, 9, 9, 10},
+        {4, 4, 4, 4, 9, 9, 9, 10}
+};
+final Integer[][] B_331 = {
+        {i, 2, i, i, i, i, i, i},
+        {i, i, i, i, i, i, i, i},
+        {i, i, i, i, i, i, i, i},
+        {i, i, i, i, i, i, i, i},
+        {i, i, i, i, i, i, i, i},
+        {i, i, i, i, i, i, 3, i}
+};
+
+        ||
+        ||
+        \/
+
+Preparing Heyawake Data.
+Prepared Heyawake Data in 0.04666445 Seconds
+
+Calculating Solution Now
+
+Solution found in 1.782639484 Seconds
+[1, 0, 0, 0, 0, 0, 0, 0]
+[0, 1, 0, 0, 1, 0, 1, 0]
+[0, 0, 0, 1, 0, 1, 0, 1]
+[1, 0, 1, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 1, 0, 1, 0]
+[0, 1, 0, 0, 0, 1, 0, 0]

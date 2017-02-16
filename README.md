@@ -1,4 +1,10 @@
+Heyawake Solver in Java
+============
+
+...
+
 BSD 2-Clause License
+============
 
 Copyright (c) 2016, Florian Braun
 All rights reserved.
